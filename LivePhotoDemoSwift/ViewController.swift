@@ -64,7 +64,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
-    //拍照
+    //拍摄视频
     @IBAction func takePhoto(_ sender: UIBarButtonItem) {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -72,7 +72,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         picker.mediaTypes = [kUTTypeMovie as String]
         present(picker, animated: true, completion: nil)
     }
-    //拍照回调
+    //拍摄回调
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         picker.dismiss(animated: true) {
             if let url = info[UIImagePickerControllerMediaURL] as? URL {
