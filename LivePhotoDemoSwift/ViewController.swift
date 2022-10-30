@@ -33,14 +33,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let generator = AVAssetImageGenerator(asset: asset)
         generator.appliesPreferredTrackTransform = true
         let time = NSValue(time: CMTimeMakeWithSeconds(CMTimeGetSeconds(asset.duration)/2, asset.duration.timescale))
+        //取出视频第一帧，做为Live图片的封面
         generator.generateCGImagesAsynchronously(forTimes: [time]) { [weak self] _, image, _, _, _ in
             if let image = image, let data = UIImagePNGRepresentation(UIImage(cgImage: image)) {
                 let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
                 let imageURL = urls[0].appendingPathComponent("image.heic")
                 try? data.write(to: imageURL, options: [.atomic])
                 
-                let image = imageURL.path
-                let mov = videoURL.path
                 let output = FilePaths.VidToLive.livePath
                 let assetIdentifier = UUID().uuidString
                 let _ = try? FileManager.default.createDirectory(atPath: output, withIntermediateDirectories: true, attributes: nil)
@@ -50,8 +49,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 } catch {
                     
                 }
-                JPEG(path: image).write(output + "/IMG.heic", assetIdentifier: assetIdentifier)
-                QuickTimeMov(path: mov).write(output + "/IMG.MOV", assetIdentifier: assetIdentifier)
+                JPEG(path: imageURL.path).write(output + "/IMG.heic", assetIdentifier: assetIdentifier)
+                QuickTimeMov(path: videoURL.path).write(output + "/IMG.MOV", assetIdentifier: assetIdentifier)
             
                 //self?.livePhotoView.livePhoto = LPDLivePhoto.livePhotoWithImageURL(NSURL(fileURLWithPath: FilePaths.VidToLive.livePath.stringByAppendingString("/IMG.JPG")), videoURL: NSURL(fileURLWithPath: FilePaths.VidToLive.livePath.stringByAppendingString("/IMG.MOV")))
                 //self?.exportLivePhoto()
